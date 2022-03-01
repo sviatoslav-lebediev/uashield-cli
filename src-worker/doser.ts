@@ -4,6 +4,10 @@ import { EventEmitter } from "events";
 
 const sitesFile = process.env.SITE_FILE;
 const proxiesFile = process.env.PROXY_FILE;
+const PROXIES_URL =
+  "https://raw.githubusercontent.com/opengs/uashieldtargets/master/proxy.json";
+const SITES_URL =
+  "https://raw.githubusercontent.com/opengs/uashieldtargets/master/sites.json";
 
 const readData = async <T>(path: string): Promise<T> => {
   const data = await readFile(path, { encoding: "utf8" });
@@ -12,28 +16,22 @@ const readData = async <T>(path: string): Promise<T> => {
 };
 
 const getSites = async (): Promise<Array<SiteData>> => {
-  if (sitesFile) {
+  if (sitesFile && !sitesFile.startsWith("http")) {
     return readData(sitesFile);
   }
 
   return axios
-    .get<Array<SiteData>>(
-      "https://raw.githubusercontent.com/opengs/uashieldtargets/master/sites.json",
-      { timeout: 10000 }
-    )
+    .get<Array<SiteData>>(sitesFile || SITES_URL, { timeout: 10000 })
     .then(({ data }) => data);
 };
 
 const getProxies = async (): Promise<Array<ProxyData>> => {
-  if (proxiesFile) {
+  if (proxiesFile && !proxiesFile.startsWith("http")) {
     return readData(proxiesFile);
   }
 
   return axios
-    .get<Array<ProxyData>>(
-      "https://raw.githubusercontent.com/opengs/uashieldtargets/master/proxy.json",
-      { timeout: 10000 }
-    )
+    .get<Array<ProxyData>>(proxiesFile || PROXIES_URL, { timeout: 10000 })
     .then(({ data }) => data);
 };
 
