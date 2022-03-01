@@ -1,4 +1,4 @@
-FROM node:16.9.1-slim AS builder
+FROM node:16.9.0-alpine AS builder
 
 WORKDIR /app
 
@@ -9,7 +9,7 @@ COPY src-worker ./src-worker
 RUN npm run build:cli
 
 
-FROM node:16-alpine
+FROM node:16.9.0-alpine
 
 WORKDIR /app
 
