@@ -1,10 +1,11 @@
 import { Doser } from "./doser";
 
+const verboseError = process.env.NON_VERBOSE_ERROR === undefined;
 const workersCount = parseInt(process.env.WORKERS_COUNT, 10) || 32;
 
 console.log("workers count", workersCount);
 
-const doser = new Doser(true, workersCount);
+const doser = new Doser(true, workersCount, verboseError);
 doser.listen("atack", (data) => console.log(data.log));
 doser.listen("error", (data) => console.error(data.log));
 
